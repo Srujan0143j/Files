@@ -7,26 +7,34 @@
 <style>
 body{
 margin:0;
-background:#000000;
-color:#00ff9c;
-font-family: monospace;
 overflow:hidden;
+background:black;
+color:#00ffb3;
+font-family:monospace;
+}
+
+/* MATRIX BACKGROUND */
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:-1;
 }
 
 /* HEADER */
 .header{
-background:#020202;
+background:#010101;
 color:#00ffbf;
 padding:12px;
 text-align:center;
-border-bottom:2px solid #00ffa6;
+border-bottom:2px solid #00ff9c;
 letter-spacing:1px;
 text-shadow:0 0 8px #00ffd5;
 }
 
-/* CONSOLE */
+/* TERMINAL */
 .console{
-height:70vh;
+height:55vh;
 overflow:hidden;
 padding:15px;
 }
@@ -34,7 +42,7 @@ padding:15px;
 .line{
 opacity:0;
 animation:show .2s forwards;
-margin:5px 0;
+margin:6px 0;
 }
 
 @keyframes show{
@@ -43,11 +51,51 @@ to{opacity:1;transform:translateY(0);}
 }
 
 .glow{
-color:#00ffa6;
-text-shadow:0 0 8px #00ffbf;
+color:#00ffbf;
+text-shadow:0 0 10px #00ffd5;
 }
 
-/* SCAN STATUS BAR */
+/* WARNING BAR */
+.alert{
+text-align:center;
+font-size:18px;
+color:#ff0033;
+margin-top:5px;
+animation:blink 1s infinite;
+text-shadow:0 0 12px red;
+}
+
+@keyframes blink{
+50%{opacity:0;}
+}
+
+/* RADAR SCAN */
+.radar-box{
+width:200px;
+height:200px;
+border:3px solid #00ff9c;
+border-radius:50%;
+margin:10px auto;
+position:relative;
+overflow:hidden;
+box-shadow:0 0 10px #00ffbf;
+}
+
+.radar{
+width:100%;
+height:100%;
+background:conic-gradient(
+rgba(0,255,180,.4),
+transparent 60%
+);
+animation:spin 2s linear infinite;
+}
+
+@keyframes spin{
+to{transform:rotate(360deg);}
+}
+
+/* PROGRESS BAR */
 .barBox{
 width:90%;
 border:2px solid #00ffbf;
@@ -64,34 +112,21 @@ background:linear-gradient(90deg,#ff0033,#ff0000);
 box-shadow:0 0 20px red inset;
 }
 
-/* FINAL PAGE */
-.final{
-display:none;
-text-align:center;
-margin-top:35px;
-font-size:25px;
-color:yellow;
-text-shadow:0 0 12px red;
-}
-
-/* BLINKING WARNING */
-.warn{
-color:#ff002b;
-font-weight:bold;
-animation:blink 1s infinite;
-text-shadow:0 0 10px #ff002b;
-}
-
-@keyframes blink{
-50%{opacity:0;}
-}
 </style>
 </head>
 
 <body>
 
+<canvas id="matrix"></canvas>
+
 <div class="header">
-ANDROID SECURITY • CRITICAL BREACH MODE
+ANDROID SECURITY • CRITICAL DEVICE BREACH MODE
+</div>
+
+<p class="alert">CRITICAL WARNING — DEVICE COMPROMISED</p>
+
+<div class="radar-box">
+<div class="radar"></div>
 </div>
 
 <div class="console" id="console"></div>
@@ -100,91 +135,89 @@ ANDROID SECURITY • CRITICAL BREACH MODE
 <div id="bar"></div>
 </div>
 
-<h2 class="final" id="final">
-😂 RELAX! THIS WAS JUST A PRANK 🤣 <br>
-YOUR PHONE IS COMPLETELY SAFE 🎉
-</h2>
-
 <script>
+/******** MATRIX BACKGROUND *********/
+const c=document.getElementById("matrix");
+const ctx=c.getContext("2d");
+c.height=window.innerHeight;
+c.width=window.innerWidth;
+let chars="01";
+chars=chars.split("");
+let font=14;
+let columns=c.width/font;
+let drops=[];
+for(let x=0;x<columns;x++) drops[x]=1;
 
-// Realistic System Log Messages
+function draw(){
+ctx.fillStyle="rgba(0,0,0,0.08)";
+ctx.fillRect(0,0,c.width,c.height);
+ctx.fillStyle="#00ff9c";
+ctx.font=font+"px monospace";
+for(let i=0;i<drops.length;i++){
+let text=chars[Math.floor(Math.random()*chars.length)];
+ctx.fillText(text,i*font,drops[i]*font);
+if(drops[i]*font>c.height && Math.random()>0.95)
+drops[i]=0;
+drops[i]++;
+}
+}
+setInterval(draw,35);
+
+
+/******** TERMINAL LOGS *********/
 let logs = [
-"[BOOT] Secure kernel loaded",
-"[SYSTEM] Initializing Android protection framework",
-"[SECURITY] Launching deep security scan...",
-"[ACCESS] Requesting privileged shell access",
-"[ACCESS] Root permission granted",
-"[SCAN] Checking integrity of /system partition...",
-"[SCAN] Inspecting running background services...",
-"[SCAN] Monitoring suspicious processes...",
-"[NETWORK] Capturing live network packets...",
-"[NETWORK] Mapping device IP, IMEI & MAC...",
-"[AUTH] Bypassing Google Play Protect...",
-"[AUTH] Validating certificate trust chain...",
-"[DATA] Reading encrypted credential storage...",
-"[DATA] Accessing application databases...",
-"[MEDIA] Indexing gallery cache...",
-"[MEDIA] Detecting hidden media files...",
-"[SIM] Reading SIM authentication key...",
-"[SIM] Carrier protection triggered...",
-"[SYSTEM] Injecting monitoring daemon...",
-"[PROCESS] Terminating secure running apps…",
-"[SECURITY] Modifying runtime security policies...",
-"[ENCRYPT] Encrypting temporary session logs...",
-"[FINAL] System breach status: SUCCESS",
-"[ALERT] <span class='warn'>CRITICAL DEVICE COMPROMISE DETECTED</span>",
-"[LOCK] Securing user access...",
-"[STATUS] Preparing device lockdown..."
+"[BOOT] Secure kernel verified",
+"[SYSTEM] Enforcing SELinux policies",
+"[SECURITY] Launching advanced threat scan",
+"[ACCESS] Requesting elevated shell privileges",
+"[ACCESS] Root privileges confirmed",
+"[SCAN] Inspecting /system partition integrity...",
+"[SCAN] Monitoring runtime activities...",
+"[PROCESS] Detecting suspicious background tasks...",
+"[NETWORK] Mapping IP / IMEI / MAC",
+"[NETWORK] Capturing encrypted traffic packets",
+"[AUTH] Bypassing Google Play Protect",
+"[SECURITY] Validating trust certificates",
+"[DATA] Accessing credential vault",
+"[STORAGE] Reading device storage sectors",
+"[MEDIA] Scanning hidden media cache",
+"[SIM] Extracting SIM authentication key",
+"[SYSTEM] Security framework override detected",
+"[SECURITY] Live threat detected",
+"[SYSTEM] Initiating lockdown protocol",
+"[STATUS] DEVICE BREACH CONFIRMED"
 ];
 
-let consoleBox = document.getElementById("console");
-let bar = document.getElementById("bar");
-let final = document.getElementById("final");
+let consoleBox=document.getElementById("console");
+let bar=document.getElementById("bar");
+let i=0;
+let percent=0;
 
-let i = 0;
-let percent = 0;
+let beep=new Audio("https://assets.mixkit.co/sfx/preview/mixkit-system-beep-buzzer-fail-2964.mp3");
+beep.volume=0.6;
 
-// Sound
-let beep = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-system-beep-buzzer-fail-2964.mp3");
-let reveal = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-positive-interface-beep-221.wav");
+let seq=setInterval(()=>{
 
-beep.volume = 0.7;
+if(i<logs.length){
+let div=document.createElement("div");
+div.className="line glow";
+div.innerHTML=logs[i];
+consoleBox.appendChild(div);
+consoleBox.scrollTop=consoleBox.scrollHeight;
 
-// Auto scrolling log effect
-let hack = setInterval(()=>{
- if(i < logs.length){
-   let div = document.createElement("div");
-   div.className = "line glow";
-   div.innerHTML = logs[i];
-   consoleBox.appendChild(div);
+beep.currentTime=0;
+beep.play().catch(()=>{});
 
-   consoleBox.scrollTop = consoleBox.scrollHeight;
+if(navigator.vibrate) navigator.vibrate(120);
 
-   beep.currentTime=0;
-   beep.play().catch(()=>{});
+i++;
+}
 
-   if(navigator.vibrate){ navigator.vibrate(100); }
+percent+=3;
+bar.style.width=percent+"%";
 
-   i++;
- }
+},180);
 
- percent += 4;
- bar.style.width = percent + "%";
-
- if(percent >= 100){
-   clearInterval(hack);
-
-   document.body.style.background = "#2d0033";
-
-   if(navigator.vibrate){
-     navigator.vibrate([500,300,500,300,800]);
-   }
-
-   reveal.play().catch(()=>{});
-   final.style.display="block";
- }
-
-},220);
 </script>
 
 </body>
