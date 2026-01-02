@@ -7,13 +7,14 @@
 <style>
 body{
 margin:0;
-background:black;
+background:#000;
 color:#00ff00;
-font-family: monospace;
+font-family:monospace;
 text-align:center;
 overflow:hidden;
 }
 
+/* TOP BAR */
 .topbar{
 background:#111;
 color:white;
@@ -23,8 +24,10 @@ justify-content:space-between;
 font-family:Arial;
 }
 
+/* Screens */
 .screen{display:none;}
 
+/******** HACK SCREEN ********/
 #hack{padding-top:40px;}
 
 .title{
@@ -35,6 +38,186 @@ background:#202020;
 padding:10px;
 border-radius:8px;
 display:inline-block;
+margin-bottom:10px;
+}
+
+.countdown{
+font-size:25px;
+color:red;
+font-weight:bold;
+}
+
+#box{
+width:80%;
+margin:auto;
+border:2px solid #00ff00;
+padding:20px;
+text-align:left;
+min-height:150px;
+}
+
+.progress{
+width:80%;
+height:25px;
+border:2px solid white;
+margin:20px auto;
+}
+
+#bar{
+height:100%;
+width:0%;
+background:red;
+}
+
+/******** LOCK ********/
+#lock{
+background:black;
+color:white;
+height:100vh;
+padding-top:100px;
+font-family:Arial;
+font-size:20px;
+}
+
+/******** FINAL ********/
+#final{
+background:#4b0082;
+color:yellow;
+height:100vh;
+padding-top:140px;
+font-size:30px;
+font-family:Arial;
+}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+<span>Android System</span>
+<span>🔔</span>
+</div>
+
+<!-- HACK SCREEN -->
+<div id="hack" class="screen">
+<div class="title">⚠ Security Warning</div>
+<h2>Your Device is Being Hacked...</h2>
+<p class="countdown">Data wipe in <span id="timer">25</span>s</p>
+
+<div id="box"></div>
+<div class="progress"><div id="bar"></div></div>
+</div>
+
+<!-- LOCK -->
+<div id="lock" class="screen">
+<h2>🔒 PHONE LOCKED</h2>
+<p>Security System Activated</p>
+<p>Please wait...</p>
+</div>
+
+<!-- FINAL -->
+<div id="final" class="screen">
+😂 JUST A PRANK! YOUR DEVICE IS SAFE 🎉
+</div>
+
+
+<script>
+
+/******** SOUND ********/
+let alarm = new Audio("https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg");
+alarm.loop = true;
+
+/******** VIBRATION FUNCTION ********/
+function vibrate(p){
+if("vibrate" in navigator){
+navigator.vibrate(p);
+}
+}
+
+/******** START IMMEDIATELY ********/
+window.onload = ()=>{
+document.getElementById("hack").style.display="block";
+try{ alarm.play(); }catch(e){}
+vibrate([600,200,600]);
+startHack();
+startTimer();
+};
+
+/******** COUNTDOWN ********/
+let t = 25;
+function startTimer(){
+let timer = setInterval(()=>{
+document.getElementById("timer").innerHTML = t;
+vibrate([200]);
+t--;
+if(t <= 0){
+clearInterval(timer);
+}
+},1000);
+}
+
+/******** HACK PROCESS ********/
+let text = [
+"Connecting to device...",
+"Scanning system files...",
+"Reading internal data...",
+"Encrypting storage...",
+"Locking device...",
+"Activating protection...",
+"Finalizing process..."
+];
+
+let i=0;
+let percent=0;
+
+function startHack(){
+let box = document.getElementById("box");
+let bar = document.getElementById("bar");
+
+let run = setInterval(()=>{
+
+if(i<text.length){
+box.innerHTML += text[i] + "<br>";
+i++;
+}
+
+percent += 10;
+bar.style.width = percent + "%";
+
+vibrate([300,200]);
+
+if(percent >= 100){
+clearInterval(run);
+lockScreen();
+}
+},700);
+}
+
+/******** LOCK SCREEN ********/
+function lockScreen(){
+document.getElementById("hack").style.display="none";
+document.getElementById("lock").style.display="block";
+
+vibrate([900,300,900]);
+
+setTimeout(()=>{
+finish();
+},5000);
+}
+
+/******** END ********/
+function finish(){
+alarm.pause();
+vibrate([1200,400,1200]);
+
+document.getElementById("lock").style.display="none";
+document.getElementById("final").style.display="block";
+}
+
+</script>
+
+</body>
+</html>display:inline-block;
 margin-bottom:10px;
 }
 
