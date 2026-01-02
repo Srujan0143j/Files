@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Android Critical Breach</title>
+<title>Cyber Terminal - Green Mode</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
@@ -9,7 +9,7 @@
 body{
 margin:0;
 background:black;
-color:#00ffea;
+color:#00ff91;
 font-family:monospace;
 overflow:hidden;
 }
@@ -17,26 +17,24 @@ overflow:hidden;
 /******** HEADER ********/
 .header{
 background:#000;
-color:#00ffee;
 padding:14px;
 text-align:center;
 letter-spacing:1px;
-border-bottom:3px solid red;
+border-bottom:3px solid #00ff6a;
 font-weight:bold;
-text-shadow:0 0 10px cyan;
+color:#00ffb3;
+text-shadow:0 0 15px #00ff6a;
 }
 
-/******** ALERT ********/
+/******** STATUS ********/
 .alert{
 text-align:center;
 font-size:18px;
-color:#ff0033;
+color:#00ff80;
 margin-top:6px;
-animation:blink 1s infinite;
 letter-spacing:1px;
-text-shadow:0 0 20px red;
+text-shadow:0 0 16px #00ff6a;
 }
-@keyframes blink{50%{opacity:0;}}
 
 /******** MATRIX BG ********/
 canvas{
@@ -52,8 +50,8 @@ width:260px;
 height:260px;
 margin:12px auto;
 border-radius:50%;
-border:3px solid #00ffe6;
-box-shadow:0 0 25px #00ffee;
+border:3px solid #00ff9c;
+box-shadow:0 0 25px #00ff9c;
 position:relative;
 overflow:hidden;
 }
@@ -62,7 +60,7 @@ overflow:hidden;
 width:100%;
 height:100%;
 background:conic-gradient(
-rgba(0,255,230,.5),
+rgba(0,255,100,.5),
 transparent 65%);
 animation:rot 1.6s linear infinite;
 }
@@ -76,9 +74,9 @@ to{transform:rotate(360deg);}
 position:absolute;
 width:10px;
 height:10px;
-background:red;
+background:#00ff6a;
 border-radius:50%;
-box-shadow:0 0 10px red;
+box-shadow:0 0 12px #00ff6a;
 }
 
 /******** CONSOLE ********/
@@ -92,43 +90,28 @@ padding:10px 15px;
 opacity:0;
 animation:show .2s forwards;
 margin:4px 0;
+color:#00ff8c;
 }
 @keyframes show{
 from{opacity:0;transform:translateY(6px);}
 to{opacity:1;transform:translateY(0);}
 }
 
-.green{color:#00ffe6;}
-.yellow{color:yellow;}
-.red{color:#ff0033;}
-
 /******** PROGRESS ********/
 .barBox{
 width:92%;
-border:2px solid #00ffee;
+border:2px solid #00ff9c;
 margin:10px auto;
 height:24px;
 border-radius:6px;
 overflow:hidden;
-box-shadow:0 0 15px #00ffee inset;
+box-shadow:0 0 15px #00ff9c inset;
 }
 
 #bar{
 height:100%;
 width:0%;
-background:linear-gradient(90deg,#ff0000,#ff2a00);
-}
-
-/******** SCREEN SHAKE ********/
-.shake{
-animation:shake .2s infinite;
-}
-@keyframes shake{
-0%{transform:translate(1px,1px);}
-25%{transform:translate(-1px,2px);}
-50%{transform:translate(2px,-1px);}
-75%{transform:translate(-2px,1px);}
-100%{transform:translate(1px,-2px);}
+background:linear-gradient(90deg,#00ff6a,#00ffaa);
 }
 
 </style>
@@ -139,11 +122,11 @@ animation:shake .2s infinite;
 <canvas id="matrix"></canvas>
 
 <div class="header">
-ANDROID SECURITY CORE • DEVICE CRITICAL BREACH MODE
+CYBER VISUAL TERMINAL • GREEN MODE ACTIVE
 </div>
 
 <p class="alert">
-⚠ SEVERE RISK: UNAUTHORIZED SYSTEM CONTROL DETECTED ⚠
+System Visual Simulation Running • Tech Demo Mode
 </p>
 
 <div class="radarWrap">
@@ -176,7 +159,7 @@ for(let i=0;i<columns;i++) drops[i]=1;
 function draw(){
 ctx.fillStyle="rgba(0,0,0,0.08)";
 ctx.fillRect(0,0,c.width,c.height);
-ctx.fillStyle="#00ffee";
+ctx.fillStyle="#00ff8c";
 ctx.font=fontSize+"px monospace";
 for(let i=0;i<drops.length;i++){
 let text=chars[Math.floor(Math.random()*chars.length)];
@@ -202,26 +185,16 @@ moveDot(d3);
 
 /******** LOGS ********/
 let logs=[
-"[CORE] Initializing secure kernel environment",
-"[SYSTEM] Enforcing SELinux ✓",
-"[SECURITY] Advanced threat protocol enabled",
-"[AUTH] Elevating privileges > SU ACCESS GRANTED",
-"[SCAN] Deep scanning /system framework files",
-"[TRACE] Monitoring suspicious runtime services",
-"[NETWORK] Mapping IP • DEVICE • LOCATION",
-"[CAPTURE] Intercepting encrypted traffic packets",
-"[AUTH] Google Play Protect override SUCCESS",
-"[VAULT] Opening credential storage engine",
-"[DATA] Extracting authentication keys",
-"[SIM] Reading SIM & IMSI security identity",
-"[SECURITY] Injecting security hooks",
-"[CORE] System trust validation FAILED",
-"[THREAT] Live attacker detected in active memory",
-"[NETWORK] Live channel hijack success",
-"[SYSTEM] Android OS control override ENABLED",
-"[LOCKDOWN] User protection restrictions disabled",
-"[BREACH] Device integrity compromised",
-"[STATUS] FULL DEVICE TAKEOVER COMPLETE"
+"[ENGINE] Initializing cyber visual core...",
+"[SYSTEM] Loading neon rendering modules...",
+"[GRAPHICS] Matrix motion effect running...",
+"[SCAN] Activating interactive radar...",
+"[STREAM] Generating live console feed...",
+"[CORE] Stabilizing energy output...",
+"[PROCESS] Syncing animation layers...",
+"[POWER] Boosting glow intensity...",
+"[STATUS] Visual simulation stable...",
+"[SUCCESS] System display optimized."
 ];
 
 let consoleBox=document.getElementById("console");
@@ -230,17 +203,14 @@ let i=0;
 let percent=0;
 
 let beep=new Audio("https://assets.mixkit.co/sfx/preview/mixkit-system-beep-buzzer-fail-2964.mp3");
-beep.volume=0.7;
-
-let intense=new Audio("https://assets.mixkit.co/sfx/preview/mixkit-security-facility-breach-alarm-994.mp3");
-intense.volume=1;
+beep.volume=0.4;
 
 /******** RUN ********/
 let seq=setInterval(()=>{
 
 if(i<logs.length){
 let div=document.createElement("div");
-div.className="line green";
+div.className="line";
 div.innerHTML=logs[i];
 consoleBox.appendChild(div);
 consoleBox.scrollTop=consoleBox.scrollHeight;
@@ -248,22 +218,14 @@ consoleBox.scrollTop=consoleBox.scrollHeight;
 beep.currentTime=0;
 beep.play().catch(()=>{});
 
-if(navigator.vibrate) navigator.vibrate(150);
+if(navigator.vibrate)
+navigator.vibrate(120);
 
 i++;
 }
 
-percent+=3;
+percent+=4;
 bar.style.width=percent+"%";
-
-/*** FINAL INTENSE MODE ***/
-if(percent>85){
-document.body.classList.add("shake");
-intense.play().catch(()=>{});
-
-if(navigator.vibrate)
-navigator.vibrate([300,200,300,200,500,200,500]);
-}
 
 },170);
 
