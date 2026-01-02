@@ -6,143 +6,296 @@
 
 <style>
 body{
-background:black;
-color:#00ffa2;
-font-family: monospace;
 margin:0;
+background:black;
+color:#00ff00;
+font-family: monospace;
+text-align:center;
 overflow:hidden;
 }
 
-.header{
-background:#0a0a0a;
+/* TOP BAR */
+.topbar{
+background:#111;
+color:white;
 padding:10px;
-text-align:center;
-color:#00ffa6;
+display:flex;
+justify-content:space-between;
+font-family:Arial;
+}
+
+/* Screens */
+.screen{display:none;}
+
+/*** HACK SCREEN ***/
+#hack{padding-top:40px;}
+
+.title{
+color:white;
+font-family:Arial;
+font-size:18px;
+background:#202020;
+padding:10px;
+border-radius:8px;
+display:inline-block;
+margin-bottom:10px;
+}
+
+.countdown{
+font-size:25px;
+color:red;
 font-weight:bold;
-border-bottom:2px solid #00ff84;
 }
 
-.container{
+#box{
+width:80%;
+margin:auto;
+border:2px solid #00ff00;
 padding:20px;
+text-align:left;
+min-height:150px;
 }
-
-.line{font-size:18px;margin-bottom:6px;}
 
 .progress{
-width:100%;height:20px;
-border:2px solid #00ff84;
-margin-top:15px;
+width:80%;
+height:25px;
+border:2px solid white;
+margin:20px auto;
 }
-#bar{height:100%;width:0%;background:red;}
 
-.final{
-display:none;
-text-align:center;
-margin-top:30px;
-font-size:24px;
+#bar{
+height:100%;
+width:0%;
+background:red;
+}
+
+/*** WHATSAPP UI ***/
+#wa{
+background:#0b141a;
+color:white;
+height:100vh;
+padding-top:20px;
+font-family:Arial;
+}
+
+.chat{
+background:#1f2c34;
+width:90%;
+margin:auto;
+border-radius:10px;
+padding:10px;
+text-align:left;
+}
+
+.msg{
+background:#005c4b;
+padding:10px;
+margin:8px;
+width:70%;
+border-radius:10px;
+}
+
+/*** SIM BLOCKED ***/
+#sim{
+background:black;
+color:red;
+height:100vh;
+padding-top:100px;
+font-family:Arial;
+}
+
+/*** LOCK SCREEN ***/
+#lock{
+background:black;
+color:white;
+height:100vh;
+padding-top:80px;
+font-family:Arial;
+font-size:20px;
+}
+
+/*** FINAL ***/
+#final{
+background:purple;
 color:yellow;
-}
-
-/* Hidden sound unlock touch catcher */
-#unlock{
-position:fixed;
-inset:0;
-z-index:999;
+height:100vh;
+padding-top:140px;
+font-size:30px;
+font-family:Arial;
 }
 </style>
 </head>
 
 <body>
 
-<div id="unlock"></div>
-
-<div class="header">
-ANDROID SECURITY SYSTEM • EMERGENCY MODE
+<div class="topbar">
+<span>Android System</span>
+<span>🔔</span>
 </div>
 
-<div class="container" id="box"></div>
+<!-- HACK SCREEN -->
+<div id="hack" class="screen">
+<div class="title">⚠ Security Warning</div>
+<h2>Your Device is Being Hacked...</h2>
+<p class="countdown">Data wipe in <span id="timer">30</span>s</p>
 
-<div class="progress">
-<div id="bar"></div>
+<div id="box"></div>
+<div class="progress"><div id="bar"></div></div>
 </div>
 
-<h2 class="final" id="final">
-DEVICE ACCESSED SUCCESSFULLY <br>
-EXTRACTED ALL THE DATA
-</h2>
+<!-- WHATSAPP -->
+<div id="wa" class="screen">
+<h2>WhatsApp</h2>
+<div class="chat" id="chat"></div>
+</div>
+
+<!-- SIM BLOCK -->
+<div id="sim" class="screen">
+<h1>🚫 SIM CARD BLOCKED</h1>
+<p>Suspicious activity detected</p>
+<p>Your SIM will be permanently disabled</p>
+</div>
+
+<!-- LOCK -->
+<div id="lock" class="screen">
+<h2>🔒 PHONE LOCKED</h2>
+<p>Security System Activated</p>
+<p>Please wait...</p>
+</div>
+
+<!-- FINAL -->
+<div id="final" class="screen">
+DEVICE HACKED SUCCESSFULLY
+</div>
+
 
 <script>
 
+/*** AUDIO ***/
+let alarm = new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg");
+alarm.loop = true;
+
+/*** VIBRATION ***/
+function vibrate(p){
+if("vibrate" in navigator){ navigator.vibrate(p); }
+}
+
+/*** AUTO START ON LOAD ***/
+window.onload = ()=>{
+document.getElementById("hack").style.display="block";
+try{ alarm.play(); }catch(e){}
+vibrate([500,200,500,200,800]);
+startHack();
+startTimer();
+};
+
+/*** COUNTDOWN ***/
+let t = 30;
+function startTimer(){
+let timer = setInterval(()=>{
+document.getElementById("timer").innerHTML = t;
+vibrate([200]);
+t--;
+if(t<=0) clearInterval(timer);
+},1000);
+}
+
+/*** HACK TEXT ***/
 let text = [
-"Initializing Android secure engine...",
-"Scanning protected directories...",
-"Intercepting running system apps...",
-"Reading encrypted passwords...",
-"Extracting gallery cache...",
-"ACCESSING BANKING SERVICES...",
-"ENCRYPTING ALL DATA...",
-"Bypassing Google Play Protect...",
-"Finalizing breach process..."
+"Connecting to device...",
+"Injecting malware...",
+"Accessing camera...",
+"Reading SIM data...",
+"Opening WhatsApp...",
+"Uploading contacts...",
+"Encrypting Storage...",
+"SIM Deactivation Started...",
+"Almost Done..."
 ];
 
+let i=0;
+let percent=0;
+
+function startHack(){
 let box=document.getElementById("box");
 let bar=document.getElementById("bar");
-let final=document.getElementById("final");
 
-let i=0,percent=0;
-let allowSound=false;
+let run=setInterval(()=>{
 
-// Sounds
-let beep = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-system-beep-buzzer-fail-2964.mp3");
-let reveal = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-positive-interface-beep-221.wav");
+if(i<text.length){
+box.innerHTML += text[i] + "<br>";
+i++;
+}
 
-// prepare
-beep.volume=0.7;
-reveal.volume=1;
+percent+=8;
+bar.style.width=percent+"%";
 
-// unlock sound + vibration on first touch
-document.getElementById("unlock").addEventListener("pointerdown", ()=>{
- allowSound=true;
- beep.play().catch(()=>{});
- if(navigator.vibrate){
-     navigator.vibrate([200,100,200]);
- }
- document.getElementById("unlock").style.display="none";
-});
+vibrate([400,200]);
 
-// start hacking animation instantly
-let hack=setInterval(()=>{
+if(percent>=100){
+clearInterval(run);
+whatsappPhase();
+}
+},600);
+}
 
- if(i<text.length){
-  box.innerHTML+=`<div class='line'>${text[i]}</div>`;
-  if(allowSound){
-    beep.currentTime=0;
-    beep.play().catch(()=>{});
-  }
-  if(navigator.vibrate){
-    navigator.vibrate(80);
-  }
-  i++;
- }
+/*** WHATSAPP PHASE ***/
+function whatsappPhase(){
+document.getElementById("hack").style.display="none";
+document.getElementById("wa").style.display="block";
 
- percent+=12;
- bar.style.width=percent+"%";
+let msgs=[
+"Downloading chats...",
+"Reading personal messages...",
+"Forwarding chats to police...",
+"Reporting suspicious activity...",
+"SIM Card flagged..."
+];
 
- if(percent>=100){
-  clearInterval(hack);
-  document.body.style.background="#3a003d";
-  final.style.display="block";
+let c=0;
+let chat=document.getElementById("chat");
 
-  if(navigator.vibrate){
-   navigator.vibrate([400,200,500,200,600]);
-  }
+let w=setInterval(()=>{
+let div=document.createElement("div");
+div.className="msg";
+div.innerText=msgs[c];
+chat.appendChild(div);
 
-  if(allowSound){
-    reveal.play().catch(()=>{});
-  }
- }
-},300);
+vibrate([500,300,500]);
 
+c++;
+if(c>=msgs.length){
+clearInterval(w);
+simBlock();
+}
+},900);
+}
+
+/*** SIM BLOCK ***/
+function simBlock(){
+document.getElementById("wa").style.display="none";
+document.getElementById("sim").style.display="block";
+vibrate([800,200,800,200,1000]);
+
+setTimeout(()=>{ lockScreen(); },3000);
+}
+
+/*** LOCK SCREEN ***/
+function lockScreen(){
+document.getElementById("sim").style.display="none";
+document.getElementById("lock").style.display="block";
+
+setTimeout(()=>{ finish(); },5000);
+}
+
+/*** END ***/
+function finish(){
+alarm.pause();
+vibrate([1200,400,1200]);
+
+document.getElementById("lock").style.display="none";
+document.getElementById("final").style.display="block";
+}
 </script>
 
 </body>
